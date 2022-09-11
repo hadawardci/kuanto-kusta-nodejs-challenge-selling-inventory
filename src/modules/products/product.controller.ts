@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
   Post,
-  Res
+  Res,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ReservationDto } from 'src/dtos/reserve.dto';
@@ -33,8 +33,9 @@ export class ProductController {
   }
 
   @Post(':id/reserve')
-  async reserve(@Param('id') id: string) {
-    return this._service.reserveItem(id);
+  async reserve(@Param('id') id: string, @Res() res: Response) {
+    const response = this._service.reserveItem(id);
+    return res.status(HttpStatus.OK).send(response);
   }
 
   @Post(':id/unreserve')
