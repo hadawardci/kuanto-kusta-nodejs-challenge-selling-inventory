@@ -113,7 +113,7 @@ export class ProductService {
           reservationToken: reservation.reservationToken,
         });
         if (product === null)
-          throw new BadRequestException('Product Unavailable');
+          throw new BadRequestException('ReservationToken expired');
 
         await this._productModel.updateOne(
           {
@@ -144,7 +144,7 @@ export class ProductService {
           reservationToken: reservation.reservationToken,
         });
         if (product === null)
-          throw new BadRequestException('Product Unavailable');
+          throw new BadRequestException('ReservationToken expired');
 
         await this._productModel.updateOne(
           {

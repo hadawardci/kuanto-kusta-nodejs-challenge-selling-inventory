@@ -2,13 +2,12 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
   Param,
   Patch,
   Post,
-  Res,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { ReservationDto } from 'src/dtos/reserve.dto';
 import { StockDto } from 'src/dtos/stock.dto';
 import { ProductService } from './product.service';
@@ -18,43 +17,33 @@ export class ProductController {
   constructor(private readonly _service: ProductService) {}
 
   @Patch(':id/stock')
-  stock(
-    @Param('id') id: string,
-    @Body() request: StockDto,
-    @Res() res: Response,
-  ) {
+  @HttpCode(HttpStatus.OK)
+  stock(@Param('id') id: string, @Body() request: StockDto) {
     this._service.setStock(id, request);
-    res.status(HttpStatus.OK).send();
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   state(@Param('id') id: string) {
     return this._service.getState(id);
   }
 
   @Post(':id/reserve')
-  async reserve(@Param('id') id: string, @Res() res: Response) {
+  @HttpCode(HttpStatus.OK)
+  async reserve(@Param('id') id: string) {
     const response = this._service.reserveItem(id);
-    return res.status(HttpStatus.OK).send(response);
+    return response;
   }
 
   @Post(':id/unreserve')
-  async unreserve(
-    @Param('id') id: string,
-    @Body() request: ReservationDto,
-    @Res() res: Response,
-  ) {
+  @HttpCode(HttpStatus.OK)
+  async unreserve(@Param('id') id: string, @Body() request: ReservationDto) {
     await this._service.unreserveItem(id, request);
-    res.status(HttpStatus.OK).send();
   }
 
   @Post(':id/sold')
-  async sold(
-    @Param('id') id: string,
-    @Body() request: ReservationDto,
-    @Res() res: Response,
-  ) {
+  @HttpCode(HttpStatus.OK)
+  async sold(@Param('id') id: string, @Body() request: ReservationDto) {
     await this._service.sold(id, request);
-    res.status(HttpStatus.OK).send();
   }
 }
